@@ -18,11 +18,11 @@ const prefix = (path) => {
 
 const config = {
   type: "mysql",
-  host: process.env.DBHOST,
-  port: Number(process.env.DBPORT),
-  username: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
+  host: "localhost",
+  port: 3306,
+  username: "timetracker-user",
+  password: "123456789",
+  database: "timetracker-db",
   synchronize: false,
   logging: false,
   entities: [prefix("{entity,domain,projection}/**/*.*")],

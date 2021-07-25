@@ -24,7 +24,10 @@ type UpdateTaskRequestBody = Partial<Omit<Task, "id">>;
 export const getAllTasks: RequestHandler<{}, GetAllTasksResponseBody> = (
   req,
   res
-) => {};
+) => {
+  console.log("Get All Tasks");
+  res.send();
+};
 export const getTask: RequestHandler<{ id: string }, GetTaskResponseBody> = (
   req,
   res

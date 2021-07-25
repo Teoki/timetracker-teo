@@ -28,7 +28,8 @@
     "lint:fix": "eslint src --fix",
     "start": "tsc-watch --outDir ./dist --onSuccess 'node dist/index.js'",
     "build": "tsc -b .",
-    "typeorm": "typeorm"
+    "typeorm": "typeorm",
+    "schema:sync": "typeorm schema:sync"
   },
   "keywords": [],
   "author": "",
