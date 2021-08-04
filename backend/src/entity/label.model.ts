@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -39,9 +38,8 @@ export class Label {
   })
   updatedAt!: Date;
 
-  @ManyToMany(() => Task, (task) => task.labelList)
-  @JoinTable()
-  taskList!: Task[];
+  @ManyToMany(() => Task, (task) => task.labels)
+  tasks!: Task[];
 
   static create(props: LabelInitProps): Label {
     const label = new Label();

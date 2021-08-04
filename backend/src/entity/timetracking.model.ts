@@ -2,10 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import * as yup from "yup";
+import { Task } from "./task.model";
 
 interface TimetrackingInitProps {
   description: string;
@@ -41,6 +44,10 @@ export class Timetracking {
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
   updatedAt!: Date;
+
+  @JoinColumn()
+  @ManyToOne(() => Task, (task) => task.timetrackings)
+  task!: Task;
 
   static create(props: TimetrackingInitProps): Timetracking {
     const timetracking = new Timetracking();

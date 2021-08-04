@@ -4,11 +4,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import * as yup from "yup";
 import { Label } from "./label.model";
+import { Timetracking } from "./timetracking.model";
 
 interface TaskInitProps {
   name: string;
@@ -44,9 +46,12 @@ export class Task {
   })
   updatedAt!: Date;
 
-  @ManyToMany(() => Label, (label) => label.taskList)
+  @ManyToMany(() => Label, (label) => label.tasks)
   @JoinTable()
-  labelList!: Label[];
+  labels!: Label[];
+
+  @OneToMany(() => Timetracking, (timetracking) => timetracking.task)
+  timetrackings!: Timetracking[];
 
   static create(props: TaskInitProps): Task {
     const task = new Task();
