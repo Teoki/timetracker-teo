@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { Task, taskSchema } from "../entity/task.model";
 import { getRepository } from "typeorm";
+import { ValidationError } from "yup";
 
 type GetAllTasksResponseBody = {
   tasks: Task[];
@@ -28,75 +29,87 @@ type UpdateTaskRequestBody = {
 
 export const getAllTasks: RequestHandler<void, GetAllTasksResponseBody> =
   async (req, res) => {
-    const repository = await getRepository(Task);
-    const tasks = repository.find({});
-    console.log("GRÖßE VOM REPO: " + repository.find({ relations: ["task"] }));
-    console.log(tasks);
-    console.log("called getAllTasks");
-    //res.send(tasks);
+    try {
+      const repository = await getRepository(Task);
+      const tasks: Task[] = await repository.find();
+      res.send({ tasks: tasks });
+    } catch (e) {
+      console.log("[GET ALL TASKS: ERROR] " + e.message);
+      res.sendStatus(500);
+    }
   };
+
 export const getTask: RequestHandler<{ id: string }, GetTaskResponseBody> =
   async (req, res) => {
-    console.log("GET TASK CALLED id: " + req.params.id);
-    const taskRepository = await getRepository(Task);
-    const task = await taskRepository.findOne(req.params.id);
-    if (task !== undefined){
+    try {
+      const repository = await getRepository(Task);
+      const task = await repository.findOneOrFail(req.params.id);
+      console.log("[GET TASK: SUCCESS] found task in db");
       res.send({ task: task });
-    } else {
-      console.log("NO TASK FOUND id: " + req.params.id);
+    } catch (e) {
+      console.log("[GET TASK: ERROR] " + e.message);
       res.sendStatus(400);
     }
   };
-export const updateTask: RequestHandler<
-  { id: string },
-  UpdateTaskResponseBody,
-  UpdateTaskRequestBody
-> = async (req, res) => {
-  const repository = await getRepository(Task);
-  await repository.update(req.params.id, req.body.updateTask);
-  const updatedTask = await repository.findOneOrFail(req.params.id);
-  res.send({ updatedTask: updatedTask });
+
+export const updateTask: RequestHandler<{ id: string }, UpdateTaskResponseBody, UpdateTaskRequestBody> =
+    async (req, res) => {
+  try {
+    const repository = await getRepository(Task);
+    const task = await repository.findOneOrFail(req.params.id);
+    await repository.update(req.params.id, req.body.updateTask);
+    console.log("[UPDATE TASK: SUCCESS] updated task in db");
+    res.send({ updatedTask: task }); //TODO lieber status 200? (falls nicht nötig im frontend)
+  } catch (e) {
+    if (e instanceof ValidationError) {
+      console.log("[UPDATE TASK: ERROR] " + e);
+      res.sendStatus(400);
+      return;
+    }
+    console.log("[UPDATE TASK: ERROR] " + e.message);
+    res.sendStatus(500);
+  }
 };
 
-export const createTask: RequestHandler<
-  CreateTaskRequestBody,
-  CreateTaskResponseBody
-> = async (req, res) => {
-  const taskRepository = await getRepository(Task);
-  console.log("called createTask");
-  console.log("req.body = " + req.body.task);
-
+export const createTask: RequestHandler<CreateTaskRequestBody, CreateTaskResponseBody> =
+    async (req, res) => {
   try {
-    const validateBody = await taskSchema.validate(req.body.task);
-    const validTask = Task.create(validateBody);
-    //const task = Task.create(req.body.task);
-    const countHasTaskWithName = await taskRepository.count({
-      name: validTask.name,
+    const repository = await getRepository(Task);
+    const validRequestBody = await taskSchema.validate(req.body.task);
+    const createdTask = await Task.create(validRequestBody); //TODO await nicht nötig?
+    const countHasTaskWithName = await repository.count({
+      name: createdTask.name,
     });
     if (countHasTaskWithName > 0) {
-      console.log("ICH HABE RICHTIG GEZÄHLT");
-      throw new Error();
+      console.log("[CREATE TASK: ERROR] name already exists");
+      res.sendStatus(400);
+      return;
     }
-    const savedTask = await taskRepository.save(validTask);
-    console.log("SAVED new Task (in createTask)");
-    res.send({ createdTask: savedTask });
+    const savedTask = await repository.save(createdTask);
+    console.log("[CREATE TASK: SUCCESS] saved new task in db");
+    res.send({ createdTask: savedTask }); //TODO status 200 lieber returnen? (falls nicht nötig im frontend)
   } catch (e) {
-    console.log("NAME EXISTIERT BEREITS" + e.message);
-    res.sendStatus(400);
+    if (e instanceof ValidationError) {
+      console.log("[CREATE TASK: ERROR] " + e);
+      res.sendStatus(400);
+      return;
+    }
+    console.log("[CREATE TASK: ERROR] " + e);
+    res.sendStatus(500);
   }
 };
 
-export const deleteTask: RequestHandler<{ id: string }, string> = async (
-  req,
-  res
-) => {
-  const repository = await getRepository(Task);
-  const foundTask = repository.findOneOrFail(req.params.id);
-  if (foundTask.catch()) {
-    console.error("KEINE ID ZUM LÖSCHEN GEFUNDEN");
-    res.send("There is no Task to delete with the id: " + req.params.id);
+export const deleteTask: RequestHandler<{ id: string }, string> =
+    async (req, res) => {
+  try {
+    const repository = await getRepository(Task);
+    await repository.findOneOrFail(req.params.id);
+    repository.delete(req.params.id);
+    console.log("[DELETE TASK: SUCCESS] deleted task with given id");
+    res.status(200).send("[DELETE TASK: SUCCESS] deleted task with the id: " + req.params.id);
+  } catch (e) {
+    console.log("[DELETE TASK: ERROR] could not find task with given id in db");
+    res.status(400).send("[DELETE TASK: ERROR] there is no task to delete with the id: " + req.params.id);
+    return;
   }
-  console.log("ID GEFUNDEN");
-  repository.delete(req.params.id);
-  res.sendStatus(res.statusCode);
 };

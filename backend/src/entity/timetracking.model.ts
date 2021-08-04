@@ -1,10 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import * as yup from "yup";
 
+interface TimetrackingInitProps {
+  description: string;
+}
+
 export const timetrackingSchema = yup.object().shape({
-  startTime: yup.date().required(),
-  endTime: yup.date().required(),
-  //....
+  description: yup.string().required(),
 });
 
 @Entity()
@@ -12,10 +20,46 @@ export class Timetracking {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "date" })
+  @Column()
+  description!: string;
+
+  @UpdateDateColumn({ type: "timestamp" })
   startTime!: Date;
 
-  @Column({ type: "date" })
+  @UpdateDateColumn({ type: "timestamp" })
   endTime!: Date;
-  //...
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  createdAt!: Date;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updatedAt!: Date;
+
+  static create(props: TimetrackingInitProps): Timetracking {
+    const timetracking = new Timetracking();
+    const current_timestamp = new Date();
+    timetracking.description = props.description;
+    timetracking.createdAt = current_timestamp;
+    timetracking.updatedAt = current_timestamp;
+    timetracking.startTime = Timetracking.updateStartTimeOfTimetracking(); //TODO --> Daten von frontend, LIEBER MIT "UPDATE"?
+    timetracking.endTime = Timetracking.updateEndTimeOfTimetracking(); //TODO --> Daten von frontend, LIEBER MIT "UPDATE"?
+    return timetracking;
+  }
+
+  //TODO MOCK --> im frontend zählen und diese methode im frontend erstellen, aus dem frontend nur ein "update" aufrufen, bei "start" button klick und dann in der DB startTime updaten
+  private static updateStartTimeOfTimetracking() {
+    return new Date();
+  }
+
+  //TODO MOCK --> im frontend zählen und diese methode im frontend erstellen
+  private static updateEndTimeOfTimetracking() {
+    return new Date();
+  }
 }

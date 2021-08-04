@@ -1,18 +1,23 @@
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import * as yup from "yup";
+import { Label } from "./label.model";
 
 interface TaskInitProps {
   name: string;
   description: string;
-  //createdAt: Date;
-  //updatedAt: Date;
 }
 
 export const taskSchema = yup.object().shape({
   name: yup.string().required(),
   description: yup.string().required(),
-  //createdAt: yup.date().required(),
-  //updatedAt: yup.date().required(),
 });
 
 @Entity()
@@ -38,6 +43,10 @@ export class Task {
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
   updatedAt!: Date;
+
+  @ManyToMany(() => Label, (label) => label.taskList)
+  @JoinTable()
+  labelList!: Label[];
 
   static create(props: TaskInitProps): Task {
     const task = new Task();
