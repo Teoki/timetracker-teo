@@ -20,7 +20,7 @@ function App() {
         .then(resp=>resp.json())
         .then(resp=>{
             console.log(resp)
-            setData(resp)})
+            setData(resp.tasks)})
   }, []);
 
   /*function openCreateTaskInputField() {
