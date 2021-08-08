@@ -55,17 +55,19 @@ export class Timetracking {
     timetracking.description = props.description;
     timetracking.createdAt = current_timestamp;
     timetracking.updatedAt = current_timestamp;
-    timetracking.startTime = Timetracking.updateStartTimeOfTimetracking(); //TODO --> Daten von frontend, LIEBER MIT "UPDATE"?
-    timetracking.endTime = Timetracking.updateEndTimeOfTimetracking(); //TODO --> Daten von frontend, LIEBER MIT "UPDATE"?
+    timetracking.startTime = Timetracking.updateStartTimeOfTimetracking(); //TODO data comes from frontend, update it from there
+    timetracking.endTime = Timetracking.updateEndTimeOfTimetracking(); //TODO data comes from frontend, update it from there
     return timetracking;
   }
 
-  //TODO MOCK --> im frontend zählen und diese methode im frontend erstellen, aus dem frontend nur ein "update" aufrufen, bei "start" button klick und dann in der DB startTime updaten
+  //this is a mock-method, so it's possible to create Timetrackings
+  //TODO in the future, send a "PUT"-HTTP request from the frontend and update the startTime in DB as soon as the user clicks "start Timetracking"
   private static updateStartTimeOfTimetracking() {
     return new Date();
   }
 
-  //TODO MOCK --> im frontend zählen und diese methode im frontend erstellen
+  //this is a mock-method, so it's possible to create Timetrackings
+  //TODO in the future, send a "PUT"-HTTP request from the frontend and update the endTime in DB as soon as the user clicks "stop Timetracking"
   private static updateEndTimeOfTimetracking() {
     return new Date();
   }

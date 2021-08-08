@@ -15,6 +15,49 @@ Für die Datenbank:
 
 Runs the app in the development mode.\
 
+## Funktionalitäten
+
+Die Benutzung der Kern-Funktionalitäten werden im nächsten Absatz "Testen" genauer beschrieben. In diesem Absatz werden sie kurz aufgelistet:
+
+## Funktionalitäten im frontend:
+
+Task-Dashboard-Seite:
+- Aufteilung der Task-Dashboard-Seite in einen Header, Seitenleiste und Hauptbereich mit der TaskTable  
+- Alle Tasks in der Datenbank werden in der TaskTable aufgelistet
+- Mit der TaskTable kann 
+   1. die Seitengröße angepasst werden (5, 10 oder 20 Tasks pro Tabellenseite)
+   2. durch die einzelnen Seiten bzw. auf die erste und letzte Seite navigiert werden
+   3. nach jedem String in der Tabelle gesucht werden (z. B. ID, Name, Description und Timestamps)
+   4. jedes Element alphabetisch Sortiert werden
+- In der Seitenleiste können Tasks und Labels erstellt/bearbeitet und gelöscht werden. Dabei sind die Pflichtfelder mit einem Stern * markiert
+- Material-UI-Elemente für eine moderne UX und UI
+
+Zum Auflisten/Erstellen/Löschen und Bearbeiten von Timetrackings wird im nächsten Absatz "Testen" eingegangen.
+
+## Funktionalitäten im backend:
+
+- CRUD System: es ist möglich mittels einer HTTP-API sowohl Tasks, Trackings als auch Labels zu erstellen anzuzeigen, aufzulisten, upzudaten und zu löschen. Wie das im backend funktioniert wird im Absatz "Testen" näher beschrieben.
+- Alle entities haben die geforderten Attribute:
+   1. Task: id, name, description, timestamps (created & updated at) (siehe backend/src/entity/task.model.ts)
+   2. Label: id, name, timestamps (created & updated at) (siehe backend/src/entity/label.model.ts)
+   3. Timetracking:  id, description, startTime, endTime, timestamps (created & updated at) (siehe backend/src/entity/timetracking.model.ts)
+- Geforderte Relationen wurden wie folgt umgesetzt:
+  ![entityRelations.png](entityRelations.png)
+  (Quelle: eigene Darstellung)
+   1. Ein Task kann 0 oder N Trackings haben (siehe backend/src/entity/task.model.ts --> Attribut: "timetrackings")
+   2. Ein Label kann 0 oder N Tasks haben und ein Task kann 0 oder N Labels haben (siehe backend/src/entity/task.model.ts & backend/src/entity/label.model.ts --> Attribute: in Task "labels" & in Label "tasks")
+- Routen:
+   1. globalRouter unter "/", liefert nur eine Willkommensnachricht
+   2. taskRouter unter "/task" und dann jeweils get("/"), get("/:id"), post("/"), put("/:id") und delete("/:id") hinten dran hängen
+   2. labelRouter unter "/label" und dann jeweils get("/"), get("/:id"), post("/"), put("/:id") und delete("/:id") hinten dran hängen
+   2. timetrackingRouter unter "/timetracking" und dann jeweils get("/"), post("/"), put("/:id") und delete("/:id") hinten dran hängen
+- 
+- offene Funktionalitäten wurden im Programmcode mit einem "TODO" kommentiert    
+
+globalRouter.use("/timetracking", timetrackingRouter);
+globalRouter.use("/task", taskRouter);
+globalRouter.use("/label", labelRouter);
+
 ## Testen
 
 ## Testen im frontend:
@@ -81,8 +124,9 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Extra features im frontend, welche nicht in der Aufgabenstellung gefordert wurden:
-1. Suchen nach allen Elementen einer Tasks: es kann nach allen Elementen in der TaskTable auf dem Task-Dashboard gesucht werden (alle anderen rows werden ausgeblendet, außer das gesuchte)
+## Freestyle task
+####extra features im frontend, welche nicht in der Aufgabenstellung gefordert wurden:
+1. Suche nach allen Elementen der TaskTable: es kann nach allen Elementen in der TaskTable auf dem Task-Dashboard gesucht werden (z. B. ID, Name, Description und Timestamps; alle anderen rows werden ausgeblendet, außer das gesuchte)
 2. Alphabetische Sortierung: alle Elemente in der TaskTable können Alphabetisch ab- und aufsteigend Sortiert werden
 3. Einstellbare Seitengröße der TaskTable: es kann entweder 5, 10 oder 20 rows in der Table gleichzeitig angezeigt werden
 4. Seitennavigation in der TaskTable: in der TaskTable kann man durch die einzelnen Table-Seiten navigieren (falls z.B. mehr als 5 Tasks existieren, aber nur 5 auf einer Page angezeigt werden)

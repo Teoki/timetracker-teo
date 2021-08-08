@@ -5,11 +5,11 @@ import { labelRouter } from "./label.router";
 
 export const globalRouter = Router({ mergeParams: true });
 
-interface HelloWorldReponse {
+interface Welcome {
   message: string;
 }
 globalRouter.get("/", (req, res) => {
-  res.send({ message: "hello world global" } as HelloWorldReponse);
+  res.send({ message: "Welcome to Time Tracker App!" } as Welcome);
 });
 
 globalRouter.use("/timetracking", timetrackingRouter);
