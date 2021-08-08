@@ -4,20 +4,47 @@ Das Projekt wurde mit [Create React App](https://github.com/facebook/create-reac
 
 ## Projekt aufsetzen
 
-Navigiere jeweils in das backend und frontend Verzeichnis und führe den folgenden Befehl aus:
+####Achtung: dieses Projekt wurde mit IntelliJ als IDE erstellt, daher wird diese IDE zum clonen empfohlen
 
-### `npm install`
+1. Clone das Projekt zunächst über HTTPS --> https://github.com/Teoki/timetracker-teo.git
+2. Begib dich ins Hauptverzeichnis des Projekts und starte die DB im "docker-compose.yaml" File, falls du dir unsicher bist, ob die DB läuft, kannst du dir "Docker Desktop" 
+   (unter https://www.docker.com/products/docker-desktop) installieren 
+   und dort die DB händisch starten. Das Ergebnis sollte so aussehen:
+   ![dockerRunningDB.png](dockerRunningDB.png)
+3. Navigiere im Terminal in das "backend"-Verzeichnis und installiere die dependencies mit dem Befehl: `npm install`
+4. Navigiere im Terminal in das "frontend"-Verzeichnis und installiere die dependencies mit dem Befehl: `npm install`
+5. Datenbank zu IntelliJ-IDE hinzufügen: 
+    1. Klicke auf der rechten Seite auf "Database", dann auf "+" und wähle MySQL aus:
+  ![addDB.png](addDB.png)
+    2.  Gebe folgende Werte ein:
+        1. Host: localhost
+        2. Port: 3306
+        3. Username: timetracker-user
+        4. Password: 123456789
+6. Du wirst unten gefragt, ob du die Treiber installieren willst. Installiere Sie indem du auf den Link klickst
+7. Klicke auf "Test Connection", falls es funktioniert hat, klicke "Apply" und bestätige/schließe das Fenster mit Klick auf den rechten Button daneben
+8. Navigiere zu "backend/package.json" und führe "schema:sync": "typeorm schema:sync" aus (klick auf grünen play button auf der linken seite)
+9. Nun kannst du das backend/frontend starten:
+    1. Starte immer zuerst das backend indem du zum "backend/package.json" navigierst und führe `"start": "tsc-watch --outDir ./dist --onSuccess 'node dist/index.js'"` unter "scripts" aus 
+       (klick auf grünen play button auf der linken seite)
+    2. Starte das frontend indem du zum "frontend/package.json" navigierst und führe `"start": "react-scripts start"` unter "scripts" aus (klick auf grünen play button auf der linken seite)
+10. Wenn die DB, backend und frontend laufen, öffne einen Browser (bevorzugt Google-Chrome) und öffne den Link http://localhost:3000/api/task.
 
-Für die Datenbank:
-1. Navigiere in die "docker-compose.yaml" und starte die DB durch den befehl
-
-### `npm start`
-
-Runs the app in the development mode.\
+Extras: folgende Frameworks und API's wurden verwendet. Du kannst diese folgendermaßen bei anderen Projekten verwenden:
+- Material-UI installieren: in frontend directory gehen und dann:
+npm install @material-ui/core
+- Für die Haupttabelle mit den ganzen Tasks:
+npm install material-table --save
+- Für die Material-ui icons:
+npm install @material-ui/icons --save
+- Für Routing:
+npm install --save react-router-dom
+- Für requests:
+npm install axios
 
 ## Funktionalitäten
 
-Die Benutzung der Kern-Funktionalitäten werden im nächsten Absatz "Testen" genauer beschrieben. In diesem Absatz werden sie kurz aufgelistet:
+Die Benutzung der Kern-Funktionalitäten werden im Absatz "Testen" genauer beschrieben. In diesem Absatz werden sie ausschließlich aufgelistet und beziehungen verdeutlicht.
 
 ## Funktionalitäten im frontend:
 
@@ -36,7 +63,11 @@ Zum Auflisten/Erstellen/Löschen und Bearbeiten von Timetrackings wird im nächs
 
 ## Funktionalitäten im backend:
 
-- CRUD System: es ist möglich mittels einer HTTP-API sowohl Tasks, Trackings als auch Labels zu erstellen anzuzeigen, aufzulisten, upzudaten und zu löschen. Wie das im backend funktioniert wird im Absatz "Testen" näher beschrieben.
+- CRUD-System: es ist möglich mittels einer HTTP-API sowohl Tasks, Trackings als auch Labels zu erstellen anzuzeigen, aufzulisten, upzudaten und zu löschen. Wie das im backend funktioniert wird im 
+  Absatz "Testen" näher beschrieben.
+- Validation des CRUD-System in den "controller"-files (z. B. 400 "Bad Request" als response, falls ein Task/Label/Timetracking mit einem bestimmten Namen bereits existiert oder falls eine ID bei 
+  einer Suche nicht existiert und 500 "Internal Server Error", falls auf einen bestimmten Request nicht anders geantwortet werden kann)
+- Logging für alle CRUD-Systems, um zu sehen ob ein request erfolgreich war; Falls ein requests gescheitert ist, werden entsprechende Fehler genau abgefangen und geloggt  
 - Alle entities haben die geforderten Attribute:
    1. Task: id, name, description, timestamps (created & updated at) (siehe backend/src/entity/task.model.ts)
    2. Label: id, name, timestamps (created & updated at) (siehe backend/src/entity/label.model.ts)
@@ -45,14 +76,22 @@ Zum Auflisten/Erstellen/Löschen und Bearbeiten von Timetrackings wird im nächs
   ![entityRelations.png](entityRelations.png)
   (Quelle: eigene Darstellung)
    1. Ein Task kann 0 oder N Trackings haben (siehe backend/src/entity/task.model.ts --> Attribut: "timetrackings")
-   2. Ein Label kann 0 oder N Tasks haben und ein Task kann 0 oder N Labels haben (siehe backend/src/entity/task.model.ts & backend/src/entity/label.model.ts --> Attribute: in Task "labels" & in Label "tasks")
+   2. Ein Label kann 0 oder N Tasks haben und ein Task kann 0 oder N Labels haben (siehe backend/src/entity/task.model.ts & backend/src/entity/label.model.ts 
+      --> Attribute: in Task "labels" & in Label "tasks")
 - Routen:
    1. globalRouter unter "/", liefert nur eine Willkommensnachricht
    2. taskRouter unter "/task" und dann jeweils get("/"), get("/:id"), post("/"), put("/:id") und delete("/:id") hinten dran hängen
    2. labelRouter unter "/label" und dann jeweils get("/"), get("/:id"), post("/"), put("/:id") und delete("/:id") hinten dran hängen
    2. timetrackingRouter unter "/timetracking" und dann jeweils get("/"), post("/"), put("/:id") und delete("/:id") hinten dran hängen
-- 
 - offene Funktionalitäten wurden im Programmcode mit einem "TODO" kommentiert    
+
+## Funktionalitäten in der Datenbank:
+
+Die MySQL-Datenbank beinhaltet folgende Tabellen und arbeitet mit den Funktionalitäten aus dem backend:
+- task --> mit id (als Primärschlüssel), name, description, createdAt und updatedAt
+- label --> mit id (als Primärschlüssel), name, createdAt und updatedAt
+- task_labels_label --> mit taskId und labelId
+- timetracking --> mit id (als Primärschlüssel), description, createdAt, updatedAt, startTime und endTime
 
 globalRouter.use("/timetracking", timetrackingRouter);
 globalRouter.use("/task", taskRouter);
@@ -125,10 +164,11 @@ Instead, it will copy all the configuration files and the transitive dependencie
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## Freestyle task
-####extra features im frontend, welche nicht in der Aufgabenstellung gefordert wurden:
-1. Suche nach allen Elementen der TaskTable: es kann nach allen Elementen in der TaskTable auf dem Task-Dashboard gesucht werden (z. B. ID, Name, Description und Timestamps; alle anderen rows werden ausgeblendet, außer das gesuchte)
+####extra features im frontend mit externen API's und Frameworks, welche nicht in der Aufgabenstellung gefordert wurden:
+1. Suche nach allen Elementen der TaskTable (material-table Framework): es kann nach allen Elementen in der TaskTable auf dem Task-Dashboard gesucht werden (z. B. ID, Name, Description und Timestamps; alle anderen rows werden ausgeblendet, außer das gesuchte)
 2. Alphabetische Sortierung: alle Elemente in der TaskTable können Alphabetisch ab- und aufsteigend Sortiert werden
 3. Einstellbare Seitengröße der TaskTable: es kann entweder 5, 10 oder 20 rows in der Table gleichzeitig angezeigt werden
 4. Seitennavigation in der TaskTable: in der TaskTable kann man durch die einzelnen Table-Seiten navigieren (falls z.B. mehr als 5 Tasks existieren, aber nur 5 auf einer Page angezeigt werden)
 5. Zusätzlich kann auf die erste bzw. letzte Table-Seite gesprungen werden
-6. Material-UI-Elemente wurden über das gesamte frontend hinweg genutzt. --> modernes UI- und UX-Design
+6. Axios als HTTP-API, um requests im Programmcode leichter les- und nutzbar zu gestalten
+7. Material-UI-Elemente (material-ui Framework) wurden über das gesamte frontend hinweg genutzt --> modernes UI- und UX-Design

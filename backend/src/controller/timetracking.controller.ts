@@ -27,8 +27,7 @@ type UpdateTimetrackingRequestBody = {
   updateTimetracking: Partial<Omit<Timetracking, "id">>;
 };
 
-export const getAllTimetrackings: RequestHandler<void, GetAllTimetrackingsResponseBody> =
-    async (req, res) => {
+export const getAllTimetrackings: RequestHandler<void, GetAllTimetrackingsResponseBody> = async (req, res) => {
   try {
     const repository = await getRepository(Timetracking);
     const timetrackings: Timetracking[] = await repository.find();
@@ -59,7 +58,7 @@ export const updateTimetracking: RequestHandler<{ id: string }, UpdateTimetracki
     const timetracking = await repository.findOneOrFail(req.params.id);
     await repository.update(req.params.id, req.body.updateTimetracking);
     console.log("[UPDATE TIMETRACKING: SUCCESS] updated timetracking in db");
-    res.send({ updatedTimetracking: timetracking }); //TODO lieber status 200? (falls nicht nötig im frontend)
+    res.send({ updatedTimetracking: timetracking });
   } catch (e) {
     if (e instanceof ValidationError) {
       console.log("[UPDATE TIMETRACKING: ERROR] " + e);
@@ -76,10 +75,10 @@ export const createTimetracking: RequestHandler<CreateTimetrackingRequestBody, C
   try {
     const repository = await getRepository(Timetracking);
     const validRequestBody = await timetrackingSchema.validate(req.body.timetracking);
-    const createdTimetracking = await Timetracking.create(validRequestBody); //TODO await nicht nötig?
+    const createdTimetracking = await Timetracking.create(validRequestBody);
     const savedTimetracking = await repository.save(createdTimetracking);
     console.log("[CREATE TIMETRACKING: SUCCESS] saved new timetracking in db");
-    res.send({ createdTimetracking: savedTimetracking }); //TODO status 200 lieber returnen? (falls nicht nötig im frontend)
+    res.send({ createdTimetracking: savedTimetracking });
   } catch (e) {
     if (e instanceof ValidationError) {
       console.log("[CREATE TIMETRACKING: ERROR] " + e);

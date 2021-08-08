@@ -59,7 +59,7 @@ export const updateTask: RequestHandler<{ id: string }, UpdateTaskResponseBody, 
     const task = await repository.findOneOrFail(req.params.id);
     await repository.update(req.params.id, req.body.updateTask);
     console.log("[UPDATE TASK: SUCCESS] updated task in db");
-    res.send({ updatedTask: task }); //TODO lieber status 200? (falls nicht nötig im frontend)
+    res.send({ updatedTask: task });
   } catch (e) {
     if (e instanceof ValidationError) {
       console.log("[UPDATE TASK: ERROR] " + e);
@@ -76,7 +76,7 @@ export const createTask: RequestHandler<CreateTaskRequestBody, CreateTaskRespons
   try {
     const repository = await getRepository(Task);
     const validRequestBody = await taskSchema.validate(req.body.task);
-    const createdTask = await Task.create(validRequestBody); //TODO await nicht nötig?
+    const createdTask = await Task.create(validRequestBody);
     const countHasTaskWithName = await repository.count({
       name: createdTask.name,
     });
@@ -87,7 +87,7 @@ export const createTask: RequestHandler<CreateTaskRequestBody, CreateTaskRespons
     }
     const savedTask = await repository.save(createdTask);
     console.log("[CREATE TASK: SUCCESS] saved new task in db");
-    res.send({ createdTask: savedTask }); //TODO status 200 lieber returnen? (falls nicht nötig im frontend)
+    res.send({ createdTask: savedTask });
   } catch (e) {
     if (e instanceof ValidationError) {
       console.log("[CREATE TASK: ERROR] " + e);

@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { Label, labelSchema } from "../entity/label.model";
 import { getRepository } from "typeorm";
-import {ValidationError} from "yup";
+import { ValidationError } from "yup";
 
 type GetAllLabelsResponseBody = {
   labels: Label[];
@@ -70,7 +70,7 @@ export const createLabel: RequestHandler<
     }
     const savedLabel = await repository.save(createdLabel);
     console.log("[CREATE LABEL: SUCCESS] saved new label in db");
-    res.send({ createdLabel: savedLabel }); //TODO status 200 senden, falls nicht nötig im frontend
+    res.send({ createdLabel: savedLabel });
   } catch (e) {
     if (e instanceof ValidationError) {
       console.log("[CREATE LABEL: ERROR] " + e);
@@ -116,9 +116,9 @@ export const updateLabel: RequestHandler<
   try {
     const repository = await getRepository(Label);
     const label = await repository.findOneOrFail(req.params.id);
-    await repository.update(req.params.id, req.body.updateLabel); //TODO updatedAt Zeit wird 2 stunden zurück angezeigt, zb anstatt 18:32 steht da 16:32, bei CREATE passt alles aber
+    await repository.update(req.params.id, req.body.updateLabel);
     console.log("[UPDATE LABEL: SUCCESS] updated label in db");
-    res.send({ updatedLabel: label }); //TODO oder status 200 falls nicht nötig im frontend
+    res.send({ updatedLabel: label });
   } catch (e) {
     console.log("[UPDATE LABEL: ERROR] " + e);
     res.sendStatus(400);
