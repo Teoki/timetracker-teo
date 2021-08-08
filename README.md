@@ -14,7 +14,7 @@ Das Projekt wurde mit [Create React App](https://github.com/facebook/create-reac
 3. Navigiere im Terminal in das "backend"-Verzeichnis und installiere die dependencies mit dem Befehl: `npm install`
 4. Navigiere im Terminal in das "frontend"-Verzeichnis und installiere die dependencies mit dem Befehl: `npm install`
 5. Datenbank zu IntelliJ-IDE hinzufügen: 
-    1. Klicke auf der rechten Seite auf "Database", dann auf "+" und wähle MySQL aus:
+    1. Klicke auf der rechten Seite auf "Database", dann auf "+" und wähle MySQL (unter Data Source) aus:
   ![addDB.png](README-Images/addDB.png)
     2.  Gebe folgende Werte ein:
         1. Host: localhost
