@@ -12,6 +12,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.21.1",
     "material-table": "^1.69.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -46,6 +47,7 @@
   },
   "proxy": "http://localhost:4000",
   "devDependencies": {
+    "@material-ui/data-grid": "^4.0.0-alpha.36",
     "@types/react-router-dom": "^5.1.8"
   }
 }

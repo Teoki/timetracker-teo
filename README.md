@@ -1,12 +1,17 @@
-# Getting Started with Create React App
+# Dieses Projekt wurde mit Create React App erstellt
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Das Projekt wurde mit [Create React App](https://github.com/facebook/create-react-app) bootsgetrapped.
 
-## Available Scripts
+## Projekt aufsetzen
 
-In the project directory, you can run:
+Navigiere jeweils in das backend und frontend Verzeichnis und führe den folgenden Befehl aus:
 
-### `yarn start`
+### `npm install`
+
+Für die Datenbank:
+1. Navigiere in die "docker-compose.yaml" und starte die DB durch den befehl
+
+### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -39,8 +44,10 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Extra features im frontend, welche nicht in der Aufgabenstellung gefordert wurden:
+1. Suchen nach allen Elementen einer Tasks: es kann nach allen Elementen in der TaskTable auf dem Task-Dashboard gesucht werden (alle anderen rows werden ausgeblendet, außer das gesuchte)
+2. Alphabetische Sortierung: alle Elemente in der TaskTable können Alphabetisch ab- und aufsteigend Sortiert werden
+3. Einstellbare Seitengröße der TaskTable: es kann entweder 5, 10 oder 20 rows in der Table gleichzeitig angezeigt werden
+4. Seitennavigation in der TaskTable: in der TaskTable kann man durch die einzelnen Table-Seiten navigieren (falls z.B. mehr als 5 Tasks existieren, aber nur 5 auf einer Page angezeigt werden)
+5. Zusätzlich kann auf die erste bzw. letzte Table-Seite gesprungen werden
+6. Material-UI-Elemente wurden über das gesamte frontend hinweg genutzt. --> modernes UI- und UX-Design
