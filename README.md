@@ -10,12 +10,12 @@ Das Projekt wurde mit [Create React App](https://github.com/facebook/create-reac
 2. Begib dich ins Hauptverzeichnis des Projekts und starte die DB im "docker-compose.yaml" File, falls du dir unsicher bist, ob die DB läuft, kannst du dir "Docker Desktop" 
    (unter https://www.docker.com/products/docker-desktop) installieren 
    und dort die DB händisch starten. Das Ergebnis sollte so aussehen:
-   ![dockerRunningDB.png](dockerRunningDB.png)
+   ![dockerRunningDB.png](README-Images/dockerRunningDB.png)
 3. Navigiere im Terminal in das "backend"-Verzeichnis und installiere die dependencies mit dem Befehl: `npm install`
 4. Navigiere im Terminal in das "frontend"-Verzeichnis und installiere die dependencies mit dem Befehl: `npm install`
 5. Datenbank zu IntelliJ-IDE hinzufügen: 
     1. Klicke auf der rechten Seite auf "Database", dann auf "+" und wähle MySQL aus:
-  ![addDB.png](addDB.png)
+  ![addDB.png](README-Images/addDB.png)
     2.  Gebe folgende Werte ein:
         1. Host: localhost
         2. Port: 3306
@@ -41,6 +41,9 @@ npm install @material-ui/icons --save
 npm install --save react-router-dom
 - Für requests:
 npm install axios
+  
+###Falls du probleme mit den einzelnen API's bzw. Frameworks hast, installiere sie auch als "dev", dazu wird dir meistens ein Vorschlag von der IDE gegeben 
+(oder option+enter auf den jeweiligen Fehler ausführen und die jeweilige Option auswählen)
 
 ## Funktionalitäten
 
@@ -73,7 +76,7 @@ Zum Auflisten/Erstellen/Löschen und Bearbeiten von Timetrackings wird im nächs
    2. Label: id, name, timestamps (created & updated at) (siehe backend/src/entity/label.model.ts)
    3. Timetracking:  id, description, startTime, endTime, timestamps (created & updated at) (siehe backend/src/entity/timetracking.model.ts)
 - Geforderte Relationen wurden wie folgt umgesetzt:
-  ![entityRelations.png](entityRelations.png)
+  ![entityRelations.png](README-Images/entityRelations.png)
   (Quelle: eigene Darstellung)
    1. Ein Task kann 0 oder N Trackings haben (siehe backend/src/entity/task.model.ts --> Attribut: "timetrackings")
    2. Ein Label kann 0 oder N Tasks haben und ein Task kann 0 oder N Labels haben (siehe backend/src/entity/task.model.ts & backend/src/entity/label.model.ts 
@@ -137,31 +140,6 @@ Nähere details zum fehlgeschlagenen request lassen sich aus der console in Inte
 - POST http://localhost:4000/api/timetracking & JSON-Body: {"timetracking": {"description":"new Timetracking"} } --> um ein neues Timetracking anzulegen
 - PUT localhost:4000/api/timetracking/{jeweilige id} & JSON-Body: {"updateTimetracking": {"name": "updated Tracking"} } --> um ein existierendes Timetracking zu bearbeiten
 - DELETE localhost:4000/api/timetracking/{jeweilige id} --> um ein Timetracking zu löschen
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
 ## Freestyle task
 ####extra features im frontend mit externen API's und Frameworks, welche nicht in der Aufgabenstellung gefordert wurden:
