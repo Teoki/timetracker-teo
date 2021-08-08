@@ -14,10 +14,47 @@ Für die Datenbank:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Testen
+
+## Testen im frontend:
+
+Öffne [http://localhost:3000/api/task](http://localhost:3000/api/task) im Browser, um die laufende Applikation zu testen und anzuschauen (backend, Datenbank und frontend müssen laufen).
+
+1. Create/Update/Delete Task: sobald die Pflichtfelder für dein jeweiliges Vorhaben befüllt 
+   und mit dem Buttonklick bestätigt werden, kannst du deinen neu erstellten/bearbeiteten Task 
+   in der TaskTable sehen. Gelöschte Tasks verschwinden aus der TaskTable.
+2. Create/Update/Delete Label: es gilt das selbe wie bei den Tasks. Befülle die input Felder und sende deinen Request ab. Die Ergebnisse sind jedoch nur in der Datenbank selbst ersichtlich.
+3. Create/Update/Delete Timetracking: Timetrackings können ausschließlich per manuelle requests über z. B. Postman (im backend) getestet werden. 
+
+## Testen im backend:
+
+Alle Postman requests auf einem Blick:
+Öffne hierzu Postman und schicke folgende Requests ab:
+[ACHTUNG: sobald eine falsche id übergeben wird oder ein Task/Label/Timetracking mit einem bestimmten Namen bereits existiert,
+wird eine 400 "Bad Request" als response ankommen. 
+Nähere details zum fehlgeschlagenen request lassen sich aus der console in IntelliJ entnehmen.]
+
+## Postman requests für Tasks
+- GET localhost:4000/api/task/{jeweilige id} --> um eine Task mit einer bestimmten ID zu holen
+- GET localhost:4000/api/task/ --> um alle Tasks, welche sich in der Datenbank befinden zu holen
+- POST http://localhost:4000/api/task & JSON-Body: {"task": {"name":"neue Task","description":"neue Task description"} } --> um eine neue Task anzulegen
+- PUT localhost:4000/api/task/{jeweilige id} & JSON-Body: {"updateTask": {"name": "Updated","description": "Das update klappt"} } --> um eine existierende Task zu bearbeiten
+- DELETE localhost:4000/api/task/{jeweilige id} --> um eine existierende Task zu löschen
+
+## Postman requests für Labels
+- GET localhost:4000/api/label/{jeweilige id} --> um ein Label mit einer bestimmten ID zu holen
+- GET localhost:4000/api/label/ --> um alle Labels, welche sich in der Datenbank befinden zu holen
+- POST http://localhost:4000/api/label & JSON-Body: {"label": {"name":"neuer Label"} } --> um ein neues Label anzulegen
+- PUT localhost:4000/api/label/{jeweilige id} & JSON-Body: {"updateLabel": {"name": "updatedLabel"} } --> um ein existierendes Label zu bearbeiten
+- DELETE localhost:4000/api/label/{jeweilige id} --> um ein Label zu löschen
+
+## Postman requests für Timetrackings
+- GET localhost:4000/api/timetracking/{jeweilige id} --> um ein Timetracking mit einer bestimmten ID zu holen
+- GET localhost:4000/api/timetracking/ --> um alle Timetrackings, welche sich in der Datenbank befinden zu holen
+- POST http://localhost:4000/api/timetracking & JSON-Body: {"timetracking": {"description":"new Timetracking"} } --> um ein neues Timetracking anzulegen
+- PUT localhost:4000/api/timetracking/{jeweilige id} & JSON-Body: {"updateTimetracking": {"name": "updated Tracking"} } --> um ein existierendes Timetracking zu bearbeiten
+- DELETE localhost:4000/api/timetracking/{jeweilige id} --> um ein Timetracking zu löschen
 
 ### `yarn test`
 
